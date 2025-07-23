@@ -45,10 +45,15 @@ async def upload(request: Request):
     size = 0
     total = int(request.headers.get('content-length', 0))
     chunk_size = 1024 * 1024  # 1MB
+    last_reported_progress = 0
+
     async for chunk in request.stream():
         size += len(chunk)
-        progress = (size / total) * 100 if total else None
-        print(f"Empfangen: {size} Bytes, Fortschritt: {progress:.2f}%")
-        # Hier können Sie z.B. Zwischenspeichern oder verarbeiten
+        if total:
+            progress = int((size / total) * 100)
+            if progress >= last_reported_progress + 5:
+                last_reported_progress = progress
+                print(f"Fortschritt: {progress}% ({size} von {total} Bytes)")
 
     return JSONResponse({"message": "Upload abgeschlossen"})
+
