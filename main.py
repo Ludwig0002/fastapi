@@ -13,6 +13,10 @@ from fastapi import FastAPI
 # from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
 import asyncio
 app = FastAPI()
 
@@ -31,3 +35,20 @@ async def sse_endpoint():
             yield f"data: Nachricht {i}\n\n"
             await asyncio.sleep(1)
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+
+
+
+@app.post("/upload")
+async def upload(request: Request):
+    size = 0
+    total = int(request.headers.get('content-length', 0))
+    chunk_size = 1024 * 1024  # 1MB
+    async for chunk in request.stream():
+        size += len(chunk)
+        progress = (size / total) * 100 if total else None
+        print(f"Empfangen: {size} Bytes, Fortschritt: {progress:.2f}%")
+        # Hier können Sie z.B. Zwischenspeichern oder verarbeiten
+
+    return JSONResponse({"message": "Upload abgeschlossen"})
