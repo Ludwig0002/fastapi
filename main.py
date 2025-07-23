@@ -10,13 +10,10 @@ from fastapi import FastAPI
 # def read_item(item_id: int, q: Optional[str] = None):
 #    return {"item_id": item_id, "q": q}
 
-
-
 # from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
-
 app = FastAPI()
 
 app.add_middleware(
@@ -27,9 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-
-@app.get("/sse")
+@app.post("/sse")
 async def sse_endpoint():
     async def event_generator():
         for i in range(10):
