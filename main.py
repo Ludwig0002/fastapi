@@ -40,6 +40,59 @@ async def sse_endpoint():
 
 
 
+
+
+
+@app.post("/upload1")
+async def sse_endpoint():
+    async def event_generator():
+        for i in range(10):
+            yield f"data: Nachricht {i}\n\n"
+            await asyncio.sleep(1)
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+
+
+
+# from fastapi import FastAPI, Request
+# from fastapi.responses import StreamingResponse
+# import asyncio
+
+app = FastAPI()
+
+@app.post("/upload2")
+async def sse_endpoint(request: Request):
+    async def event_generator():
+        body = await request.body()
+        total_size = len(body)
+        chunk_size = total_size // 20  # 5% Schritte
+        sent = 0
+        last_percent = 0
+
+        for i in range(0, total_size, chunk_size):
+            await asyncio.sleep(0.2)  # Simuliere Verarbeitung
+            sent = min(i + chunk_size, total_size)
+            percent = int((sent / total_size) * 100)
+
+            if percent >= last_percent + 5:
+                last_percent = percent
+                yield f"data: Fortschritt: {percent}%\n\n"
+
+        yield f"data: Upload abgeschlossen\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+
+
+
+
+
+
+
+
+
 @app.post("/upload")
 async def upload(request: Request):
     size = 0
