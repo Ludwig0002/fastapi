@@ -59,7 +59,7 @@ async def sse_endpoint():
 # from fastapi.responses import StreamingResponse
 # import asyncio
 
-app = FastAPI()
+# app = FastAPI()
 
 @app.post("/upload2")
 async def sse_endpoint(request: Request):
