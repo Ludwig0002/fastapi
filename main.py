@@ -18,6 +18,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 import asyncio
+import json
+
 app = FastAPI()
 
 app.add_middleware(
@@ -77,7 +79,10 @@ async def sse_endpoint(request: Request):
 
             if percent >= last_percent + 5:
                 last_percent = percent
-                yield f"{percent}\n\n"
+                # yield f"{percent}\n\n"
+                json_data = json.dumps({"progress": percent})
+                yield f"{json_data}\n\n"
+
 
         yield f"100\n\n" # yield f"data: Upload abgeschlossen\n\n"
 
