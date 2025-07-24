@@ -77,9 +77,9 @@ async def sse_endpoint(request: Request):
 
             if percent >= last_percent + 5:
                 last_percent = percent
-                yield f"data: Fortschritt: {percent}%\n\n"
+                yield f"{percent}\n\n"
 
-        yield f"data: Upload abgeschlossen\n\n"
+        yield f"100\n\n" # yield f"data: Upload abgeschlossen\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
