@@ -81,7 +81,7 @@ async def sse_endpoint(request: Request):
                 last_percent = percent
                 # yield f"{percent}\n\n"
                 json_data = json.dumps({"progress": percent})
-                yield f"{json_data}\n\n"
+                yield f"data: {json_data}\n\n"
 
 
         yield f"100\n\n" # yield f"data: Upload abgeschlossen\n\n"
