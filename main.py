@@ -57,6 +57,13 @@ async def sse_endpoint():
 
 
 
+
+
+
+
+
+
+
 # from fastapi import FastAPI, Request
 # from fastapi.responses import StreamingResponse
 # import asyncio
@@ -83,10 +90,19 @@ async def sse_endpoint(request: Request):
                 json_data = json.dumps({"progress": percent})
                 yield f"data: {json_data}\n\n"
                 # yield f"{json_data}\n\n"
-
-        yield f"100\n\n" # yield f"data: Upload abgeschlossen\n\n"
+        
+        json_data2 = json.dumps({"progress": 100})
+        yield f"data: {json_data2}\n\n" # yield f"data: Upload abgeschlossen\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+
+
+
+
+
+
 
 
 
